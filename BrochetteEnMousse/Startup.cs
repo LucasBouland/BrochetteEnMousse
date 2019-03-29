@@ -10,11 +10,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BrochetteEnMousse.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MousseModels.Data;
 using MousseModels.Models;
-
 namespace BrochetteEnMousse
 {
     public class Startup

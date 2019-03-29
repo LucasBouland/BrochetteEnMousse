@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using MousseModels;
 using MousseModels.Models;
 
-namespace BrochetteEnMousse.Data
+namespace MousseModels.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
