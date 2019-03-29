@@ -11,7 +11,7 @@ namespace MousseModels.Models
         [Required]
         [StringLength(50)]
         public string Pseudo { get; set; }
-
-       
-    }
+        public ICollection<CampaignUser> CampaignUsers { get; set; }
+        public ICollection<SessionUser> SessionUsers { get; set; }
+    } 
 }

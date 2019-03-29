@@ -13,6 +13,7 @@ namespace MousseModels.Models
         {
             Visibility = Visibility.Members;
         }
+        [Required]
         public string UserID { get; set; }
         [ForeignKey("UserID")]
         public User User { get; set; }
@@ -21,5 +22,7 @@ namespace MousseModels.Models
         public string Name { get; set; }
         [Required]
         public Visibility Visibility { get; set; }
+        public ICollection<ScenarioMonster> ScenarioMonsters { get; set; }
+        public ICollection<ScenarioSession> ScenarioSessions { get; set; }
     }
 }

@@ -22,5 +22,8 @@ namespace MousseModels.Models
         [Required]
         //TODO Default
         public Visibility Visibility { get; set; }
+        public ICollection<CampaignUser> CampaignUsers { get; set; }
+        public ICollection<CharacterCampaign> CharacterCampaigns { get; set; }
+
     }
 }

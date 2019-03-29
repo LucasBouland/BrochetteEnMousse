@@ -26,5 +26,6 @@ namespace MousseModels.Models
         public Visibility Visibility { get; set; }
 
         public string Description { get; set; }
+        public ICollection<SessionUser> SessionUsers { get; set; }
     }
 }

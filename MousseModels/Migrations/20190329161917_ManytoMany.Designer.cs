@@ -4,14 +4,16 @@ using BrochetteEnMousse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MousseModels.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190329161917_ManytoMany")]
+    partial class ManytoMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,8 +188,7 @@ namespace MousseModels.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<string>("UserID")
-                        .IsRequired();
+                    b.Property<string>("UserID");
 
                     b.HasKey("ID");
 
@@ -219,15 +220,13 @@ namespace MousseModels.Migrations
                     b.Property<string>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Image")
-                        .IsRequired();
+                    b.Property<byte[]>("Image");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<string>("ScenarioID")
-                        .IsRequired();
+                    b.Property<string>("ScenarioID");
 
                     b.HasKey("ID");
 
@@ -262,8 +261,7 @@ namespace MousseModels.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<string>("UserID")
-                        .IsRequired();
+                    b.Property<string>("UserID");
 
                     b.Property<int>("Visibility");
 
@@ -467,8 +465,7 @@ namespace MousseModels.Migrations
                 {
                     b.HasOne("MousseModels.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("MousseModels.Models.CharacterCampaign", b =>
@@ -486,16 +483,14 @@ namespace MousseModels.Migrations
                 {
                     b.HasOne("MousseModels.Models.Scenario", "Scenario")
                         .WithMany()
-                        .HasForeignKey("ScenarioID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ScenarioID");
                 });
 
             modelBuilder.Entity("MousseModels.Models.Scenario", b =>
                 {
                     b.HasOne("MousseModels.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("MousseModels.Models.ScenarioMonster", b =>

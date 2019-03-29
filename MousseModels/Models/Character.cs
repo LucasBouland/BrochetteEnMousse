@@ -8,6 +8,7 @@ namespace MousseModels.Models
 {
     public class Character : BaseModel
     {
+        [Required]
         public string UserID { get; set; }
         [ForeignKey("UserID")]
         public User User { get; set; }
@@ -18,5 +19,8 @@ namespace MousseModels.Models
         public bool IsPlayerCharacter { get; set; }
         [Required]
         public string Description { get; set; }
+
+        public ICollection<CampaignUser> CampaignUsers { get; set; }
+
     }
 }

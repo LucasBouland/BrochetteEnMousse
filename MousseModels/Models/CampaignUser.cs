@@ -8,12 +8,12 @@ namespace MousseModels.Models
 {
     public class CampaignUser: BaseModel
     {
-        public string UserID { get; set; }
-        [ForeignKey("UserID")]
-        public User User { get; set; }
         public string CampaignID { get; set; }
         [ForeignKey("CampaignID")]
         public Campaign Campaign { get; set; }
+        public string UserID { get; set; }
+        [ForeignKey("UserID")]
+        public User User { get; set; }
         [Required]
         public bool IsGameMaster { get; set; }
     }
