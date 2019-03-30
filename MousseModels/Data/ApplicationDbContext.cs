@@ -16,12 +16,12 @@ namespace MousseModels.Data
         {
         }
 
-        DbSet<Campaign> Campaigns { get; set; }
-        DbSet<Character> Characters { get; set; }
-        DbSet<Session> Sessions { get; set; }
-        DbSet<Scenario> Scenarios { get; set; }
-        DbSet<Monster> Monsters { get; set; }
-        DbSet<Map> Maps { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<Character> Characters { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<Scenario> Scenarios { get; set; }
+        public DbSet<Monster> Monsters { get; set; }
+        public DbSet<Map> Maps { get; set; }
 
     }
 }
