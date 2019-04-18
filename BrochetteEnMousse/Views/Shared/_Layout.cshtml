@@ -76,8 +76,8 @@
                 </a>
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a href="#" class="list-group-item list-group-item-action waves-effect">
-                        <a href="#"><i class="fas fa-user mr-3"></i>Profile</a>
+                    <a  asp-action="manage" asp-controller="account" asp-area="identity" class="list-group-item list-group-item-action waves-effect">
+                        <i class="fas fa-user mr-3"></i>Profile
                     </a>
                 }
                 <a href="#" class="list-group-item list-group-item-action waves-effect">
