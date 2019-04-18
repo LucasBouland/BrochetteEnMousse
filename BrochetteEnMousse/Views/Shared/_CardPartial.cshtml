@@ -1,4 +1,7 @@
 ﻿@model CardViewModel
+@{
+    //Utilisation : @await Html.PartialAsync("_CardPartial", new CardViewModel { Columns = 6, Content = "test" })
+}
 <div class="col-md-@Model.Columns mb-4">
     <!--Card-->
     <div class="card">
