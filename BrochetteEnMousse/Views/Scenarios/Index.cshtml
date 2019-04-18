@@ -7,7 +7,7 @@
 <div class="row wow fadeIn">
     @foreach (var item in Model)
     {
-
+        // afficer uniquement ceux dont la visibilité == celle de l'utilisateur
         @await Html.PartialAsync("_CardPartial", new CardViewModel { Columns = 6, Title = item.Name, Author = item.User.Pseudo, Content = item.Content })
 
     }
