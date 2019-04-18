@@ -57,7 +57,7 @@ namespace BrochetteEnMousse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Name,Visibility,ID")] Scenario scenario)
+        public async Task<IActionResult> Create([Bind("UserID,Name,Visibility,Content,ID")] Scenario scenario)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace BrochetteEnMousse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("UserID,Name,Visibility,ID")] Scenario scenario)
+        public async Task<IActionResult> Edit(string id, [Bind("UserID,Name,Visibility,Content,ID")] Scenario scenario)
         {
             if (id != scenario.ID)
             {

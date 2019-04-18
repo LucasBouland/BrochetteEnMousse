@@ -20,6 +20,7 @@ namespace MousseModels.Models
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
+        public string Content { get; set; }
         [Required]
         public Visibility Visibility { get; set; }
         public ICollection<ScenarioMonster> ScenarioMonsters { get; set; }
