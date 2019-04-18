@@ -1,11 +1,12 @@
-﻿<div class="col-md-6 mb-4">
+﻿@model CardViewModel
+<div class="col-md-@Model.Columns mb-4">
     <!--Card-->
     <div class="card">
         <!-- Card header -->
         <div class="card-header">Google map</div>
         <!--Card content-->
         <div class="card-body">
-
+            @Model.Content
         </div>
     </div>
     <!--/.Card-->
