@@ -13,6 +13,10 @@ namespace MousseModels.Models
         /// </summary>
         public int Columns { get; set; }
         /// <summary>
+        /// Titre de la carte
+        /// </summary>
+        public string Title { get; set; }
+        /// <summary>
         /// Contenu du body de la carte
         /// </summary>
         public string Content { get; set; }
