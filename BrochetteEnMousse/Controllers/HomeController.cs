@@ -25,13 +25,14 @@ namespace BrochetteEnMousse.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+#if DEBUG
         /// <summary>
         /// Page de test pour le template
         /// </summary>
-        /// <returns></returns>
         public IActionResult Template()
         {
             return View();
         }
+#endif
     }
 }
