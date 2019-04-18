@@ -29,7 +29,6 @@ namespace BrochetteEnMousse.Controllers
         /// <summary>
         /// Page de test pour le template
         /// </summary>
-        /// <returns></returns>
         public IActionResult Template()
         {
             return View();
