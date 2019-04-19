@@ -46,13 +46,6 @@ namespace BrochetteEnMousse
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> master
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
