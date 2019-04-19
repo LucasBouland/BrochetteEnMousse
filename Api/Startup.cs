@@ -22,6 +22,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Api.Models;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Api
 {
@@ -43,8 +45,6 @@ namespace Api
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -79,10 +79,16 @@ namespace Api
             #endregion
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                     policy => policy.RequireRole("Administrator"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -108,6 +114,56 @@ namespace Api
                     name: "default",
                     template: "{controller=Scenarios}/{action=Index}/{id?}");
             });
+
+            CreateRoles(serviceProvider).Wait();
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            //initializing custom roles   
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            string[] roleNames = { "Admin", "User" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1  
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            User admin = await UserManager.FindByEmailAsync("admin@ynov.com");
+
+            if (admin == null)
+            {
+                admin = new User()
+                {
+                    UserName = "Admin-Ynov",
+                    Pseudo = "Admin",
+                    Email = "admin@ynov.com"
+                };
+                await UserManager.CreateAsync(admin, "Test@123");
+            }
+            await UserManager.AddToRoleAsync(admin, "Admin");
+
+
+            User user = await UserManager.FindByEmailAsync("user@ynov.com");
+
+            if (user == null)
+            {
+                user = new User()
+                {
+                    UserName = "User-Ynov",
+                    Pseudo = "User",
+                    Email = "user@ynov.com",
+                };
+                await UserManager.CreateAsync(user, "Test@123");
+            }
+            await UserManager.AddToRoleAsync(user, "User");
         }
     }
 }

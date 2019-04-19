@@ -79,6 +79,7 @@ namespace BrochetteEnMousse
             });
             CreateRoles(serviceProvider).Wait();
         }
+
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             //initializing custom roles   
