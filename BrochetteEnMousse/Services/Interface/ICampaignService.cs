@@ -12,6 +12,6 @@ namespace BrochetteEnMousse.Services
         Campaign Create(Campaign c);
         Campaign Read(Guid id);
         Campaign Update(Campaign c, Guid id);
-        Campaign Delete(Guid id);
+        void Delete(Guid id);
     }
 }

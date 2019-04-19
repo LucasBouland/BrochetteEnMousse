@@ -23,12 +23,14 @@ namespace BrochetteEnMousse.Data
 
         public Campaign Create(Campaign c)
         {
-            throw new NotImplementedException();
+            campaigns.Add(c);
+            return c;
         }
 
-        public Campaign Delete(Guid id)
+        public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var existing = campaigns.First(a => a.ID == id.ToString());
+            campaigns.Remove(existing);
         }
 
         public IEnumerable<Campaign> Index()
@@ -38,12 +40,14 @@ namespace BrochetteEnMousse.Data
 
         public Campaign Read(Guid id)
         {
-            throw new NotImplementedException();
+            return campaigns.Where(a => a.ID == id.ToString())
+            .FirstOrDefault();
         }
 
-        public Campaign Update(Campaign c, Guid id)
+        public void Update(Campaign c, Guid id)
         {
-            throw new NotImplementedException();
+            var camp = campaigns.Where(a => a.ID == id.ToString()).FirstOrDefault();
+            camp = c;
         }
     }
 }

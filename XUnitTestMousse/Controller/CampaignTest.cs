@@ -26,9 +26,8 @@ namespace XUnitTestMousse.Controller
 
             var result = _controller.Index();
 
-            // Assert
-            //Assert.IsType<OkObjectResult>(result.Result);
             Assert.NotNull(result);
+            //Assert.IsType<OkObjectResult>(result.Result);
         }
 
         [Fact]
@@ -39,8 +38,15 @@ namespace XUnitTestMousse.Controller
 
         [Fact]
         public void SelectTest()
-        {
+        {/*
+            // Arrange
+            var testGuid = new Guid("ab2bd817-98cd-4cf3-a80a-53ea0cd9c200");
 
+            // Act
+            var okResult = _controller.Get(testGuid);
+
+            // Assert
+            Assert.IsType<OkObjectResult>(okResult.Result);*/
         }
 
         [Fact]
