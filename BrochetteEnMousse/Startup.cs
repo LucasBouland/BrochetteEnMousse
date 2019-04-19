@@ -38,11 +38,11 @@ namespace BrochetteEnMousse
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User,IdentityRole>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-       
+
 
 
 
@@ -51,7 +51,7 @@ namespace BrochetteEnMousse
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -77,6 +77,55 @@ namespace BrochetteEnMousse
                     name: "default",
                     template: "{controller=Scenarios}/{action=Index}/{id?}");
             });
+            CreateRoles(serviceProvider).Wait();
+        }
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            //initializing custom roles   
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            string[] roleNames = { "Admin", "User" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1  
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            User admin = await UserManager.FindByEmailAsync("admin@ynov.com");
+
+            if (admin == null)
+            {
+                admin = new User()
+                {
+                    UserName = "Admin-Ynov",
+                    Pseudo = "Admin",
+                    Email = "admin@ynov.com"
+                };
+                await UserManager.CreateAsync(admin, "Test@123");
+            }
+            await UserManager.AddToRoleAsync(admin, "Admin");
+
+
+            User user = await UserManager.FindByEmailAsync("user@ynov.com");
+
+            if (user == null)
+            {
+                user = new User()
+                {
+                    UserName = "User-Ynov",
+                    Pseudo = "User",
+                    Email = "user@ynov.com",
+                };
+                await UserManager.CreateAsync(user, "Test@123");
+            }
+            await UserManager.AddToRoleAsync(user, "User");
         }
     }
 }
+   
