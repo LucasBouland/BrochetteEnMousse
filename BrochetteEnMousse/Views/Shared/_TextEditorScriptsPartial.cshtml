@@ -1,8 +1,51 @@
 ﻿<!-- Include external JS libs. -->
 @{
     //Utilisation : await Html.RenderPartialAsync("_TextEditorScriptsPartial") dans la page concernée;
-    }
+}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@2.9.5/js/froala_editor.pkgd.min.js"></script>
-<script>$.getScript("https://cdn.jsdelivr.net/npm/froala-editor@2.9.5/js/froala_editor.pkgd.min.js", function () { $("textarea").froalaEditor({ height: 300 }); });</script>
+
+<script>
+    $.getScript("https://cdn.jsdelivr.net/npm/froala-editor@2.9.5/js/froala_editor.pkgd.min.js", function () {
+        $('textarea')
+            .froalaEditor({
+
+                // Set the image upload URL.
+                imageUploadURL: '/UploadFiles',
+
+                // Additional upload params.
+                imageUploadParams: { id: 'my_editor' },
+
+                // Set request type.
+                imageUploadMethod: 'POST',
+
+                // Set max image size to 5MB.
+                imageMaxSize: 5 * 1024 * 1024,
+
+                // Allow to upload PNG and JPG.
+                imageAllowedTypes: ['jpeg', 'jpg', 'png']
+            })
+            .on('froalaEditor.image.beforeUpload', function (e, editor, images) {
+                // Return false if you want to stop the image upload.
+                console.log("1")
+            })
+            .on('froalaEditor.image.uploaded', function (e, editor, response) {
+                console.log("2")
+                // Image was uploaded to the server.
+            })
+            .on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+                // Image was inserted in the editor.
+            })
+            .on('froalaEditor.image.replaced', function (e, editor, $img, response) {
+                // Image was replaced in the editor.
+            })
+            .on('froalaEditor.image.error', function (e, editor, error, response) {
+                console.log(error)
+
+                // Response contains the original server response to the request if available.
+            });
+    });</script>
+
+
+
