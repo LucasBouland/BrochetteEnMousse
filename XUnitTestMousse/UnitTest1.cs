@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace XUnitMousseUnitTests
+namespace XUnitTestMousse
 {
     public class UnitTest1
     {

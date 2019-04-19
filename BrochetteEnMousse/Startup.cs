@@ -14,6 +14,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MousseModels.Data;
 using MousseModels.Models;
+using BrochetteEnMousse.Services;
+using BrochetteEnMousse.Services.Service;
+
 namespace BrochetteEnMousse
 {
     public class Startup
@@ -38,15 +41,14 @@ namespace BrochetteEnMousse
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User,IdentityRole>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-       
 
 
 
-
+            services.AddScoped<ICampaignService, CampaignService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
