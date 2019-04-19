@@ -22,7 +22,7 @@ namespace BrochetteEnMousse.Controllers
         // GET: Campaigns
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Campaigns.ToListAsync());
+            return View(await _context.Campaigns.Include(u => u.CampaignUsers).ThenInclude(u => u.User).ToListAsync());
         }
 
         // GET: Campaigns/Details/5
@@ -59,6 +59,8 @@ namespace BrochetteEnMousse.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(campaign);
+                var user = _context.Users.Single(u => u.Email == User.Identity.Name);
+                _context.Add(new CampaignUser { CampaignID = campaign.ID, Campaign = campaign, UserID = user.Id, User = user, IsGameMaster = true });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
