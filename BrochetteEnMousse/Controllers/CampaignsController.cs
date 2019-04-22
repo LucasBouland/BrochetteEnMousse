@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BrochetteEnMousse.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,16 +13,10 @@ namespace BrochetteEnMousse.Controllers
     public class CampaignsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ICampaignService _service;
 
         public CampaignsController(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        public CampaignsController(ICampaignService service)
-        {
-            _service = service;
         }
 
         // GET: Campaigns

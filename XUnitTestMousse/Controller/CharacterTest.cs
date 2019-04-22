@@ -1,17 +1,12 @@
-﻿using BrochetteEnMousse.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using MousseModels.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace XUnitTestMousse.Controller
 {
-    public class CampaignTest
+    public class CharacterTest
     {
-
         [Fact]
         public void IndexTest()
         {

@@ -14,8 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MousseModels.Data;
 using MousseModels.Models;
-using BrochetteEnMousse.Services;
-using BrochetteEnMousse.Services.Service;
 
 namespace BrochetteEnMousse
 {
@@ -47,8 +45,7 @@ namespace BrochetteEnMousse
                 .AddDefaultTokenProviders();
 
 
-
-            services.AddScoped<ICampaignService, CampaignService>();
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
