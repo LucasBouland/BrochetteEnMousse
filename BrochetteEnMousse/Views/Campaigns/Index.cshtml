@@ -14,20 +14,32 @@
                 <div class="card-header d-sm-flex justify-content-between"><a href="@Url.Action("details", "campaigns", new { @item.ID})"><div class="mb-2 mb-sm-0 pt-1">@item.Name</div></a> <div class="d-flex justify-content-center">@item.CampaignUsers.First(u => u.IsGameMaster).User.Pseudo</div></div>
                 <!--Card content-->
                 <div class="card-body">
-                    <h4>Joueurs:</h4>
-                    <ul>
-                        @foreach (var player in item.CampaignUsers)
-                        {
-                            <li>
-                                @player.User.Pseudo
-                            </li>
-                        }
-                    </ul>
-                    <h4>Description:</h4>
-                    <div>
-                        @Html.Raw(@item.Description)
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h4>Maitre de jeu:</h4>
+                            <ul>
+                                <li>
+                                    @item.CampaignUsers.First(g => g.IsGameMaster).User.Pseudo
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Joueurs:</h4>
+                            <ul>
+                                @foreach (var player in item.CampaignUsers.Where(u => !u.IsGameMaster))
+                                {
+                                    <li>
+                                        @player.User.Pseudo
+                                    </li>
+                                }
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                        <h4>Description:</h4>
+                        <div>
+                            @Html.Raw(@item.Description)
+                        </div>
+                    </div>
             </div>
             <!--/.Card-->
         </div>

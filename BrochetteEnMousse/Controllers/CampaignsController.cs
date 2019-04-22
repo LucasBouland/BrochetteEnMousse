@@ -49,9 +49,11 @@ namespace BrochetteEnMousse.Controllers
         }
 
         // GET: Campaigns/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var users = await _context.Users.Select(u => u.Pseudo).ToListAsync();
+            var campaign = new CampaignViewModel { Players = users };
+            return View(campaign);
         }
 
         // POST: Campaigns/Create
@@ -59,13 +61,20 @@ namespace BrochetteEnMousse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Visibility,ID")] Campaign campaign)
+        public async Task<IActionResult> Create([Bind("Name,Description,Visibility,Players")] CampaignViewModel campaignModel)
         {
+            Campaign campaign = new Campaign { Name = campaignModel.Name, Description = campaignModel.Description, Visibility = campaignModel.Visibility };
             if (ModelState.IsValid)
             {
                 _context.Add(campaign);
-                var user = _context.Users.Single(u => u.Email == User.Identity.Name);
-                _context.Add(new CampaignUser { CampaignID = campaign.ID, Campaign = campaign, UserID = user.Id, User = user, IsGameMaster = true });
+                var author = _context.Users.Single(u => u.Email == User.Identity.Name);
+                //TODO concat les 2 adds?
+                _context.Add(new CampaignUser { CampaignID = campaign.ID, Campaign = campaign, UserID = author.Id, User = author, IsGameMaster = true });
+                foreach (var playerName in campaignModel.Players)
+                {
+                    var player = _context.Users.Single(u => u.Pseudo == playerName);
+                    _context.Add(new CampaignUser { CampaignID = campaign.ID, Campaign = campaign, UserID = player.Id, User = player, IsGameMaster = false });
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
