@@ -17,6 +17,10 @@ namespace MousseModels.Models
         /// </summary>
         public string Title { get; set; }
         /// <summary>
+        /// Le nom de l'auteur
+        /// </summary>
+        public string Author { get; set; }
+        /// <summary>
         /// Contenu du body de la carte
         /// </summary>
         public string Content { get; set; }

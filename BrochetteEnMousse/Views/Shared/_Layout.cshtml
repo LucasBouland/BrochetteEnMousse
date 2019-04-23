@@ -16,6 +16,15 @@
     <link href="~/css/mdb.min.css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
     <link href="~/css/style.min.css" rel="stylesheet">
+    @RenderSection("Css", required: false)
+    <script type="text/javascript" src="~/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="~/js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="~/js/mdb.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </head>
 <body class="grey lighten-3">
     <!--Main Navigation-->
@@ -62,7 +71,7 @@
         <!-- Navbar -->
         <!-- Sidebar -->
         <div class="sidebar-fixed position-fixed">
-            <a class="logo-wrapper waves-effect">
+            <a href="/"class="logo-wrapper waves-effect">
                 <img src="https://mdbootstrap.com/img/logo/mdb-email.png" class="img-fluid" alt="">
             </a>
             <div class="list-group list-group-flush">
@@ -87,6 +96,11 @@
                 <a class="list-group-item list-group-item-action waves-effect"  asp-controller="Maps" asp-action="Index">
                     <i class="fas fa-map mr-3"></i>Maps
                 </a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="btn btn-primary btn-sm waves-effect waves-light" href="@Url.Action("create", "campaigns")">Nouvelle Campagne</a>
+                    <a class="btn btn-primary btn-sm waves-effect waves-light" href="@Url.Action("create", "scenarios")">Nouveau Scenario</a>
+                }
             </div>
         </div>
         <!-- Sidebar -->
@@ -148,22 +162,12 @@
         </div>
         <!--/.Copyright-->
     </footer>
-
     <!--/.Footer-->
-    <!-- SCRIPTS -->
-    <!-- JQuery -->
-    <script type="text/javascript" src="~/js/jquery-3.3.1.min.js"></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="~/js/popper.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="~/js/mdb.min.js"></script>
     <!-- Initializations -->
     <script type="text/javascript">
         // Animations initialization
         new WOW().init();
     </script>
-    @RenderSection("Scripts", required: false)
+    
 </body>
 </html>

@@ -6,26 +6,15 @@ using static MousseModels.Helpers;
 
 namespace MousseModels.Models
 {
-    public class Campaign : BaseModel
+    public class CampaignViewModel
     {
-
-        public Campaign()
-        {
-            Visibility = Visibility.Members;
-        }
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
-
         [Required]
         public string Description { get; set; }
         [Required]
-        //TODO Default
         public Visibility Visibility { get; set; }
-        public ICollection<CampaignUser> CampaignUsers { get; set; }
-        public ICollection<CharacterCampaign> CharacterCampaigns { get; set; }
-
-        public ICollection<Session> Sessions { get; set; }
-
+        public List<string> Players { get; set; }
     }
 }
