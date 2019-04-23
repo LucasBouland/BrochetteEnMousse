@@ -14,6 +14,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MousseModels.Data;
 using MousseModels.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace BrochetteEnMousse
 {
     public class Startup
@@ -43,12 +47,11 @@ namespace BrochetteEnMousse
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+          
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("isMJ", policy => policy.RequireClaim("IsMJ", "true"));
             });
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
