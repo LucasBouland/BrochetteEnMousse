@@ -32,29 +32,24 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link waves-effect" href="#">
-                                Home
-                                <span class="sr-only">(current)</span>
+                        <li class="nav-item d-md-none d-lg-none  d-xl-none ">
+                            <a class="nav-link waves-effect" asp-controller="Campaigns" asp-action="Index">
+                                Campagnes
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
-                                About
-                                MDB
+                        <li class="nav-item d-md-none d-lg-none  d-xl-none">
+                            <a class="nav-link waves-effect" asp-controller="Characters" asp-action="Index">
+                                Personnages
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/getting-started/download/"
-                               target="_blank">
-                                Free
-                                download
+                        <li class="nav-item d-md-none d-lg-none  d-xl-none">
+                            <a class="nav-link waves-effect" asp-controller="Scenarios" asp-action="Index">
+                                Scénarios
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/education/bootstrap/" target="_blank">
-                                Free
-                                tutorials
+                        <li class="nav-item d-md-none d-lg-none  d-xl-none">
+                            <a class="nav-link waves-effect" asp-controller="Maps" asp-action="Index">
+                                Map
                             </a>
                         </li>
                     </ul>
@@ -76,18 +71,21 @@
                 </a>
                 @if (SignInManager.IsSignedIn(User))
                 {
-                        <a class="list-group-item list-group-item-action waves-effect" asp-area="Identity" asp-page="/Account/Manage/Index">
-                            <i class="fas fa-user mr-3"></i>Profile
-                        </a>
+                    <a class="list-group-item list-group-item-action waves-effect" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        <i class="fas fa-user mr-3"></i>Profile
+                    </a>
                 }
-                <a href="#" class="list-group-item list-group-item-action waves-effect">
-                    <i class="fas fa-table mr-3"></i>Tables
+                <a class="list-group-item list-group-item-action waves-effect" asp-controller="Campaigns" asp-action="Index">
+                    <i class="fas fa-money-bill-alt mr-3"></i>Campagnes
                 </a>
-                <a href="#" class="list-group-item list-group-item-action waves-effect">
+                <a class="list-group-item list-group-item-action waves-effect" asp-controller="Characters" asp-action="Index">
+                    <i class="fas fa-money-bill-alt mr-3"></i>Personnages
+                </a>
+                <a class="list-group-item list-group-item-action waves-effect" asp-controller="Scenarios" asp-action="Index">
+                    <i class="fas fa-money-bill-alt mr-3"></i>Scénarios
+                </a>
+                <a class="list-group-item list-group-item-action waves-effect"  asp-controller="Maps" asp-action="Index">
                     <i class="fas fa-map mr-3"></i>Maps
-                </a>
-                <a href="#" class="list-group-item list-group-item-action waves-effect">
-                    <i class="fas fa-money-bill-alt mr-3"></i>Orders
                 </a>
             </div>
         </div>
@@ -98,7 +96,7 @@
             @RenderBody()
         </div>
     </main>
-    <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn">
+    <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn" style="position:absolute;width:100%">
         <!--Call to action-->
         <div class="pt-4">
             <a class="btn btn-outline-white" href="https://mdbootstrap.com/docs/jquery/getting-started/download/" target="_blank"
