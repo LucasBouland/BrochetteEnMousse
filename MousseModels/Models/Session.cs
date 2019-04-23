@@ -15,7 +15,7 @@ namespace MousseModels.Models
         }
         public string CampaignID { get; set; }
         [ForeignKey("CampaignID")]
-        public User Campaign { get; set; }
+        public Campaign Campaign { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -27,5 +27,6 @@ namespace MousseModels.Models
 
         public string Description { get; set; }
         public ICollection<SessionUser> SessionUsers { get; set; }
+
     }
 }
