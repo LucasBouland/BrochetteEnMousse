@@ -34,6 +34,21 @@
             <div>
                 @Html.Raw(Model.Description)
             </div>
+            <h4>Sessions:</h4>
+            <div>
+                <ul>
+
+                    @if (Model.Sessions != null)
+                    {
+                        @foreach (var session in Model.Sessions)
+                        {
+                            <li>
+                                <a href="@Url.Action("details", "session", new { session.ID})">@session.Name</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
         </div>
     </div>
     <!--/.Card-->

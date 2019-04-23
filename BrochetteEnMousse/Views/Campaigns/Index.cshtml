@@ -19,7 +19,7 @@
                         <li>
                             @item.CampaignUsers.Single(u => u.IsGameMaster).User.Pseudo
                         </li>
-                        
+
                     </ul>
 
                     <h4>Joueurs:</h4>
@@ -34,6 +34,22 @@
                     <h4>Description:</h4>
                     <div>
                         @Html.Raw(@item.Description)
+                    </div>
+                    <h4>Sessions:</h4>
+                    <div>
+                        <ul>
+
+                            @if (item.Sessions != null)
+                            {
+                                @foreach (var session in item.Sessions)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("details", "session", new { session.ID})">@session.Name</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+
                     </div>
                 </div>
             </div>
