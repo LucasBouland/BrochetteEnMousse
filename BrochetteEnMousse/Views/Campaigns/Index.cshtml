@@ -14,9 +14,17 @@
                 <div class="card-header d-sm-flex justify-content-between"><a href="@Url.Action("details", "campaigns", new { @item.ID})"><div class="mb-2 mb-sm-0 pt-1">@item.Name</div></a> <div class="d-flex justify-content-center">@item.CampaignUsers.First(u => u.IsGameMaster).User.Pseudo</div></div>
                 <!--Card content-->
                 <div class="card-body">
+                    <h4>Maitre de Jeu:</h4>
+                    <ul>
+                        <li>
+                            @item.CampaignUsers.Single(u => u.IsGameMaster).User.Pseudo
+                        </li>
+                        
+                    </ul>
+
                     <h4>Joueurs:</h4>
                     <ul>
-                        @foreach (var player in item.CampaignUsers)
+                        @foreach (var player in item.CampaignUsers.Where(u => !u.IsGameMaster))
                         {
                             <li>
                                 @player.User.Pseudo
