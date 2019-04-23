@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MousseModels.Data;
 using MousseModels.Models;
+using BrochetteEnMousse.Services.Interface;
+using BrochetteEnMousse.Services.Infrastructure;
 
 namespace BrochetteEnMousse
 {
@@ -47,6 +49,7 @@ namespace BrochetteEnMousse
 
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddScoped<ICrudTest<Campaign>,CampaignRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
