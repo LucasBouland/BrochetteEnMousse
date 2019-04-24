@@ -27,7 +27,20 @@ namespace BrochetteEnMousse.Controllers
         // GET: Campaigns
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Campaigns.Include(u => u.Sessions).Include(u => u.CampaignUsers).ThenInclude(u => u.User).ToListAsync());
+            //TODO changer ca aaaaaaaaaaa
+            User user;
+            if (User.Identity.IsAuthenticated)
+                user = await _context.Users.SingleOrDefaultAsync(u => u.Email == User.Identity.Name);
+            else
+                user = new User { Id = "" };
+            return View(await _context.Campaigns
+                .Include(u => u.Sessions)
+                .Include(u => u.CampaignUsers)
+                    .ThenInclude(u => u.User)
+                .Where( u => u.Visibility == MousseModels.Helpers.Visibility.All 
+                || (u.Visibility == MousseModels.Helpers.Visibility.Members && u.CampaignUsers.Any(cu => cu.UserID == user.Id)) 
+                || (u.Visibility == MousseModels.Helpers.Visibility.Self && u.CampaignUsers.Any(cu => cu.UserID == user.Id && cu.IsGameMaster)))
+                .ToListAsync());
         }
 
         // GET: Campaigns/Details/5
