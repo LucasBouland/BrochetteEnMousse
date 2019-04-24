@@ -37,9 +37,9 @@ namespace BrochetteEnMousse.Controllers
                 .Include(u => u.Sessions)
                 .Include(u => u.CampaignUsers)
                     .ThenInclude(u => u.User)
-                .Where( u => u.Visibility == MousseModels.Helpers.Visibility.All 
-                || (u.Visibility == MousseModels.Helpers.Visibility.Members && u.CampaignUsers.Any(cu => cu.UserID == user.Id)) 
-                || (u.Visibility == MousseModels.Helpers.Visibility.Self && u.CampaignUsers.Any(cu => cu.UserID == user.Id && cu.IsGameMaster)))
+                .Where(u => u.Visibility == MousseModels.Helpers.Visibility.All
+               || (u.Visibility == MousseModels.Helpers.Visibility.Members && u.CampaignUsers.Any(cu => cu.UserID == user.Id))
+               || (u.Visibility == MousseModels.Helpers.Visibility.Self && u.CampaignUsers.Any(cu => cu.UserID == user.Id && cu.IsGameMaster)))
                 .ToListAsync());
         }
 
@@ -50,14 +50,16 @@ namespace BrochetteEnMousse.Controllers
             {
                 return NotFound();
             }
-            
             var campaign = await _context.Campaigns.Include(u => u.Sessions).Include(u => u.CampaignUsers).ThenInclude(u => u.User).FirstOrDefaultAsync(m => m.ID == id);
             if (campaign == null)
             {
                 return NotFound();
             }
 
-            return View(new CampaignDetailsViewModel { Campaign = campaign, Session = new Session()});
+
+            var users = await _context.Users.Where(u => !campaign.CampaignUsers.Select(cu => cu.UserID).Contains(u.Id)).ToListAsync();
+            ViewBag.Users = users.Select(r => new SelectListItem { Value = r.Id.ToString(), Text = r.Pseudo }).ToList();
+            return View(new CampaignDetailsViewModel { Campaign = campaign, Session = new Session(), CampaignUser = new CampaignUser(), Users = users });
         }
 
         // GET: Campaigns/Create
@@ -256,7 +258,29 @@ namespace BrochetteEnMousse.Controllers
             ViewData["CampaignID"] = new SelectList(_context.Users, "Id", "Id", session.CampaignID);
             return View(session);
 
-            
+
+        }
+        [HttpPost]
+        [Produces("application/json")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPlayers(CampaignUser campaignUser)
+        {
+            var campaignUsers = new List<string>();
+            var keys = Request.Form.Keys;
+
+            foreach (var value in Request.Form["Campaign.CampaignUsers"])
+            {
+                var userId = value;
+                var user = _context.Users.Single(u => u.Id == userId);
+                var campaign = _context.Campaigns.Single(u => u.ID == Request.Form["Campaign.ID"]);
+                var cu = new CampaignUser { UserID = userId, CampaignID = Request.Form["Campaign.ID"], User = user, Campaign = campaign };
+                campaignUsers.Add(cu.User.Pseudo);
+                _context.Add(cu);
+                await _context.SaveChangesAsync();
+            }
+
+
+            return Json(new { campaignUsers });
         }
     }
 }
