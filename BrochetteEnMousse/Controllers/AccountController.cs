@@ -20,20 +20,51 @@ namespace BrochetteEnMousse.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly UserManager<User> _userManager;
-
+        
         public AccountController(ApplicationDbContext context,IHostingEnvironment hostingEnvironment,UserManager<User> userManager)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _userManager = userManager;
         }
-        [Authorize(Policy="isMJ")]
-        public IActionResult Index()
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("/admins/users")]
+        public async Task<IActionResult> ListUser()
         {
-            return View();
+            Dictionary<User,IList<String>> listUsersWithRoles = new Dictionary<User, IList<string>>();
+            foreach(var user in _context.Users.ToList<User>())
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                listUsersWithRoles.Add(user, userRoles);
+            }
+            return View("/Views/Admins/Users.cshtml",listUsersWithRoles);
         }
 
-        
+        [Authorize(Roles = "Admin")]
+        [HttpPut("type")]
+        [Route("/admins/users/status")]
+        public async Task<IActionResult> updateRole(string type,string id)
+        {
+            var userFound = _userManager.Users.Single<User>(user => user.Id == id);
+            var userRoles = await _userManager.GetRolesAsync(userFound);
+            if(type == "promote")
+            {
+                await _userManager.RemoveFromRoleAsync(userFound, "User");
+                await _userManager.AddToRoleAsync(userFound, "Admin");
+            }
+            else
+            {
+                await _userManager.RemoveFromRoleAsync(userFound, "Admin");
+                await _userManager.AddToRoleAsync(userFound, "User");
+            }
+            return Json("ok");
+        }
+
+        [Authorize(Roles = "Admin,User")]
+        [HttpPost]
         [Route("/user/upload/files")]
         public async Task<IActionResult> uploadIlmage(List<IFormFile> image)
         {
@@ -95,8 +126,6 @@ namespace BrochetteEnMousse.Controllers
             catch (ArgumentException ex)
             {
                 return Json("ça marche pas");
-
-                //return Redirect("/Identity/Account/Manage");
             }
 
         }
