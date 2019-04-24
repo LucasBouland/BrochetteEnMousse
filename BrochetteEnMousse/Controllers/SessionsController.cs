@@ -71,7 +71,19 @@ namespace BrochetteEnMousse.Controllers
             }
             ViewData["CampaignID"] = new SelectList(_context.Users, "Id", "Id", session.CampaignID);
             var user = await _userManager.GetUserAsync(User);
-            await _userManager.AddClaimAsync(user, new Claim("isMJ", "True"));
+            var claims = await _userManager.GetClaimsAsync(user);
+            bool isNotFound = true;
+            foreach (var claim in claims)
+            {
+                if(claim == new Claim("isMJ", "True"))
+                {
+                    isNotFound = false;
+                }
+            }
+            if (isNotFound)
+            {
+                await _userManager.AddClaimAsync(user, new Claim("isMJ", "True"));
+            }
             return View(session);
         }
 
