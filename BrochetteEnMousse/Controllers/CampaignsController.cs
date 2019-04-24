@@ -44,7 +44,7 @@ namespace BrochetteEnMousse.Controllers
                 return NotFound();
             }
 
-            return View(campaign);
+            return View(new CampaignDetailsViewModel { Campaign = campaign, Session = new Session()});
         }
 
         // GET: Campaigns/Create
@@ -219,6 +219,16 @@ namespace BrochetteEnMousse.Controllers
             {
                 return Json(ex.Message);
             }
+        }
+        public IActionResult TestAjax()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult TestAjax(Session session)
+        {
+            return Json(new { session });
         }
     }
 }

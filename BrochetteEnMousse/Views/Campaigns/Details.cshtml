@@ -1,29 +1,38 @@
-﻿@model MousseModels.Models.Campaign
+﻿@model MousseModels.Models.CampaignDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_TextEditorScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery-unobstrusive-ajax/jquery.unobstrusive-ajax.js"></script>
+}
 
+@section Css {
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.5/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.5/css/froala_style.min.css" rel="stylesheet" type="text/css" />
+}
 <h1>Details</h1>
 
 <div class="col-md-12 mb-4">
     <!--Card-->
     <div class="card">
         <!-- Card header -->
-        <div class="card-header d-sm-flex justify-content-between"><div class="mb-2 mb-sm-0 pt-1">@Model.Name</div> <div class="d-flex justify-content-center">@Model.CampaignUsers.First(u => u.IsGameMaster).User.Pseudo</div></div>
+        <div class="card-header d-sm-flex justify-content-between"><div class="mb-2 mb-sm-0 pt-1">@Model.Campaign.Name</div> <div class="d-flex justify-content-center">@Model.Campaign.CampaignUsers.First(u => u.IsGameMaster).User.Pseudo</div></div>
         <!--Card content-->
         <div class="card-body">
             <h4>Maitre de Jeu:</h4>
             <ul>
                 <li>
-                    @Model.CampaignUsers.Single(u => u.IsGameMaster).User.Pseudo
+                    @Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Pseudo
                 </li>
 
             </ul>
 
             <h4>Joueurs:</h4>
             <ul>
-                @foreach (var player in Model.CampaignUsers.Where(u => !u.IsGameMaster))
+                @foreach (var player in Model.Campaign.CampaignUsers.Where(u => !u.IsGameMaster))
                 {
                     <li>
                         @player.User.Pseudo
@@ -32,15 +41,15 @@
             </ul>
             <h4>Description:</h4>
             <div>
-                @Html.Raw(Model.Description)
+                @Html.Raw(Model.Campaign.Description)
             </div>
             <h4>Sessions:</h4>
             <div>
                 <ul>
 
-                    @if (Model.Sessions != null)
+                    @if (Model.Campaign.Sessions != null)
                     {
-                        @foreach (var session in Model.Sessions)
+                        @foreach (var session in Model.Campaign.Sessions)
                         {
                             <li>
                                 <a href="@Url.Action("details", "session", new { session.ID})">@session.Name</a>
@@ -53,7 +62,45 @@
     </div>
     <!--/.Card-->
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="TestAjax"
+              method="post"
+              data-ajax="true"
+              data-ajax-method="post"
+              data-ajax-complete="completed"
+              data-ajax-confirm="Are you sure you want to do this?">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Session.Name" class="control-label"></label>
+                <input asp-for="Session.Name" class="form-control" />
+                <span asp-validation-for="Session.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Session.Description" class="control-label"></label>
+                <textarea asp-for="Session.Description" class="form-control"> </textarea>
+                <span asp-validation-for="Session.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Session.Visibility" class="control-label"></label>
+                <select asp-for="Session.Visibility" asp-items="@Html.GetEnumSelectList<MousseModels.Helpers.Visibility>()" class="form-control"></select>
+                <span asp-validation-for="Session.Visibility" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Campaign.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    completed = function (xhr) {
+        alert(`Wow ${xhr.responseText}, you are brave!`);
+    };
+</script>
