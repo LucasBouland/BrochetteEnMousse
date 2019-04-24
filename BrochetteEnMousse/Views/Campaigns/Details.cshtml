@@ -44,7 +44,10 @@
                 @Html.Raw(Model.Campaign.Description)
             </div>
             <h4>Sessions:</h4>
-            <div>
+            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#centralModalLGInfoDemo">
+                Ajouter une session
+            </button>
+            <div id="Sessions">
                 <ul>
 
                     @if (Model.Campaign.Sessions != null)
@@ -52,7 +55,7 @@
                         @foreach (var session in Model.Campaign.Sessions)
                         {
                             <li>
-                                <a href="@Url.Action("details", "session", new { session.ID})">@session.Name</a>
+                                <a href="@Url.Action("details", "sessions", new { session.ID})">@session.Name</a>
                             </li>
                         }
                     }
@@ -63,44 +66,72 @@
     <!--/.Card-->
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="TestAjax"
-              method="post"
-              data-ajax="true"
-              data-ajax-method="post"
-              data-ajax-complete="completed"
-              data-ajax-confirm="Are you sure you want to do this?">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Session.Name" class="control-label"></label>
-                <input asp-for="Session.Name" class="form-control" />
-                <span asp-validation-for="Session.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Session.Description" class="control-label"></label>
-                <textarea asp-for="Session.Description" class="form-control"> </textarea>
-                <span asp-validation-for="Session.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Session.Visibility" class="control-label"></label>
-                <select asp-for="Session.Visibility" asp-items="@Html.GetEnumSelectList<MousseModels.Helpers.Visibility>()" class="form-control"></select>
-                <span asp-validation-for="Session.Visibility" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Campaign.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-
+<!-- Central Modal Large Info-->
+<div class="modal fade" id="centralModalLGInfoDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Créer une nouvelle session</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <div class="text-center">
+                    <form asp-action="AddSession"
+                          method="post"
+                          data-ajax="true"
+                          data-ajax-method="post"
+                          data-ajax-complete="completed">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Session.CampaignID" class="control-label"></label>
+                            <input asp-for="Session.CampaignID" class="form-control" value="@Model.Campaign.ID"/>
+                            <span asp-validation-for="Session.CampaignID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Session.Name" class="control-label"></label>
+                            <input asp-for="Session.Name" class="form-control" />
+                            <span asp-validation-for="Session.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Session.Description" class="control-label"></label>
+                            <textarea asp-for="Session.Description" class="form-control"> </textarea>
+                            <span asp-validation-for="Session.Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Session.Visibility" class="control-label"></label>
+                            <select asp-for="Session.Visibility" asp-items="@Html.GetEnumSelectList<MousseModels.Helpers.Visibility>()" class="form-control"></select>
+                            <span asp-validation-for="Session.Visibility" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <input type="submit" class="btn btn-info" />
+                            </div>
+                            <button role="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+<!-- Central Modal Large Info-->
 <script>
     completed = function (xhr) {
-        alert(`Wow ${xhr.responseText}, you are brave!`);
+        console.log(xhr);
+        var session = xhr.responseJSON;
+        $('#Sessions ul').append('<li><a>' + session.name + '</a></li>');
     };
 </script>

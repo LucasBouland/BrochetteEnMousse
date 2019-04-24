@@ -27,7 +27,7 @@ namespace BrochetteEnMousse.Controllers
         // GET: Campaigns
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Campaigns.Include(u => u.CampaignUsers).ThenInclude(u => u.User).ToListAsync());
+            return View(await _context.Campaigns.Include(u => u.Sessions).Include(u => u.CampaignUsers).ThenInclude(u => u.User).ToListAsync());
         }
 
         // GET: Campaigns/Details/5
@@ -38,7 +38,7 @@ namespace BrochetteEnMousse.Controllers
                 return NotFound();
             }
             
-            var campaign = await _context.Campaigns.Include(u => u.CampaignUsers).ThenInclude(u => u.User).FirstOrDefaultAsync(m => m.ID == id);
+            var campaign = await _context.Campaigns.Include(u => u.Sessions).Include(u => u.CampaignUsers).ThenInclude(u => u.User).FirstOrDefaultAsync(m => m.ID == id);
             if (campaign == null)
             {
                 return NotFound();
@@ -229,6 +229,21 @@ namespace BrochetteEnMousse.Controllers
         public IActionResult TestAjax(Session session)
         {
             return Json(new { session });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddSession(Session session)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(session);
+                await _context.SaveChangesAsync();
+                return Json(new { session });
+            }
+            ViewData["CampaignID"] = new SelectList(_context.Users, "Id", "Id", session.CampaignID);
+            return View(session);
+
+            
         }
     }
 }
