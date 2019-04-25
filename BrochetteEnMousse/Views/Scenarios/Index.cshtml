@@ -12,5 +12,23 @@
 
     }
 </div>
+<script>
+    $(window).on('load', function () {
+        $('.open-link a').click(function () {
+            console.log($(this).parent().siblings('.desc-wrap'))
+            var $wrap = $(this).parent().siblings('.desc-wrap');
+            if ($wrap.css("height") == "250px") {
+                $wrap.css('height', 'auto');
+                var autoHeight = $wrap.height();
+                $wrap.css('height', '250px');
+                $wrap.animate({ height: autoHeight }, 1000);
+            } else {
+                $wrap.animate({ height: "250px" }, 1000);
+            }
+            return false;
+        });
+    });
+
+</script>
 
 

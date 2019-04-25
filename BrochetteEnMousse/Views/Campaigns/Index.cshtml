@@ -13,7 +13,7 @@
                 <!-- Card header -->
                 <div class="card-header d-sm-flex justify-content-between"><a href="@Url.Action("details", "campaigns", new { @item.ID})"><div class="mb-2 mb-sm-0 pt-1">@item.Name</div></a> <div class="d-flex justify-content-center">@item.CampaignUsers.First(u => u.IsGameMaster).User.Pseudo</div></div>
                 <!--Card content-->
-                <div class="card-body">
+                <div class="card-body desc-wrap" style="height: 250px; overflow: hidden" itemprop="description">
                     <h4>Maitre de Jeu:</h4>
                     <ul>
                         <li>
@@ -52,9 +52,27 @@
 
                     </div>
                 </div>
+                <div class="desc-fade"></div>
+                <div class="open-link" style="display: block;">
+                    <a href="#">Expand Full Description</a>
+                </div>
             </div>
             <!--/.Card-->
         </div>
     }
 </div>
+<script>
+    $('.open-link a').click(function () {
+        var $wrap = $(this).parent().siblings('.desc-wrap');
+        if ($wrap.css("height") == "250px") {
+            $wrap.css('height', 'auto');
+            var autoHeight = $wrap.height();
+            $wrap.css('height', '250px');
+            $wrap.animate({ height: autoHeight }, 1000);
+        } else {
+            $wrap.animate({ height: "250px" }, 1000);
+        }
+        return false;
+    });
+</script>
 
