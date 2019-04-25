@@ -1,5 +1,4 @@
 ﻿using BrochetteEnMousse.Controllers;
-using BrochetteEnMousse.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using MousseModels.Models;
 using Moq;
@@ -8,6 +7,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.EntityFrameworkCore;
+using MousseModels.Data;
 
 namespace XUnitTestMousse.Controller
 {
@@ -17,17 +18,19 @@ namespace XUnitTestMousse.Controller
         [Fact]
         public async Task IndexTestAsync()
         {
-            // Arrange
-            var mockRepo = new Mock<ICrudTest<Campaign>>();
-            mockRepo.Setup(repo => repo.Index())
-                .ReturnsAsync(GetTestCampaigs());
-            var controller = new CampaignsController(mockRepo.Object);
+            
+        }
 
-            // Act
-            var result = await controller.Index();
+        [Fact]
+        public async Task Details()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=brochetteMousse;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            var _context = new ApplicationDbContext(optionsBuilder.Options);
+            var campaign = await _context.Campaigns.FirstOrDefaultAsync(c => c.Name == "TestCampaignAll");
+            Console.WriteLine(campaign);
+            Assert.NotNull(campaign);
 
-            // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
@@ -53,25 +56,6 @@ namespace XUnitTestMousse.Controller
         {
 
         }
-
-        private List<Campaign> GetTestCampaigs()
-        {
-            var campaigns = new List<Campaign>
-            {
-                new Campaign()
-                {
-                    ID = "1",
-                    Name = "Test One",
-                    Description = "Test description"
-                },
-                new Campaign()
-                {
-                    ID = "1",
-                    Name = "Test One",
-                    Description = "Test description"
-                }
-            };
-            return campaigns;
-        }
+        
     }
 }
