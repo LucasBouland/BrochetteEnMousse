@@ -6,10 +6,14 @@
     <!--Card-->
     <div class="card">
         <!-- Card header -->
-        <div class="card-header">@Model.Title</div>
+        <div class="card-header d-sm-flex justify-content-between"><div class="mb-2 mb-sm-0 pt-1"><a href="@Url.Action("details", "scenarios", new { @Model.Id})">@Model.Title</a></div> <div class="d-flex justify-content-center">@Model.Author</div></div>
         <!--Card content-->
-        <div class="card-body">
-            @Model.Content
+        <div class="card-body desc-wrap" style="height: 250px; overflow: hidden" itemprop="description">
+            @Html.Raw(Model.Content)
+        </div>
+        <div class="desc-fade"></div>
+        <div class="open-link" style="display: block;">
+            <a href="#">Expand Full Description</a>
         </div>
     </div>
     <!--/.Card-->

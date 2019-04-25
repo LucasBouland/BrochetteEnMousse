@@ -42,11 +42,16 @@ namespace BrochetteEnMousse
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentity<User, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+          
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("isMJ", policy => policy.RequireClaim("IsMJ", "true"));
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
