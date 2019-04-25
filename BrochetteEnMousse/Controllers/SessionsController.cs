@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +15,12 @@ namespace BrochetteEnMousse.Controllers
     public class SessionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public SessionsController(ApplicationDbContext context)
+        public SessionsController(ApplicationDbContext context,UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Sessions
@@ -66,6 +70,20 @@ namespace BrochetteEnMousse.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CampaignID"] = new SelectList(_context.Users, "Id", "Id", session.CampaignID);
+            var user = await _userManager.GetUserAsync(User);
+            var claims = await _userManager.GetClaimsAsync(user);
+            bool isNotFound = true;
+            foreach (var claim in claims)
+            {
+                if(claim == new Claim("isMJ", "True"))
+                {
+                    isNotFound = false;
+                }
+            }
+            if (isNotFound)
+            {
+                await _userManager.AddClaimAsync(user, new Claim("isMJ", "True"));
+            }
             return View(session);
         }
 

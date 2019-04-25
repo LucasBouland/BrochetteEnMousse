@@ -83,8 +83,6 @@ namespace BrochetteEnMousse.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    await _userManager.AddClaimAsync(user,new Claim("isMJ","false","bool"));
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
