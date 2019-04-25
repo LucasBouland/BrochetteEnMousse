@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -71,6 +72,7 @@ namespace BrochetteEnMousse.Controllers
         // POST: Campaigns/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles="Admin,User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Visibility,ID")] Campaign campaign)
@@ -105,6 +107,7 @@ namespace BrochetteEnMousse.Controllers
         // POST: Campaigns/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Name,Description,Visibility,ID")] Campaign campaign)
@@ -137,6 +140,7 @@ namespace BrochetteEnMousse.Controllers
             return View(campaign);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Campaigns/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -170,6 +174,8 @@ namespace BrochetteEnMousse.Controllers
         {
             return _context.Campaigns.Any(e => e.ID == id);
         }
+
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("UploadFiles")]
         [Produces("application/json")]
         public async Task<IActionResult> Post(List<IFormFile> files)
@@ -245,6 +251,7 @@ namespace BrochetteEnMousse.Controllers
         {
             return Json(new { session });
         }
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSession(Session session)
@@ -260,6 +267,7 @@ namespace BrochetteEnMousse.Controllers
 
 
         }
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         [Produces("application/json")]
         [ValidateAntiForgeryToken]

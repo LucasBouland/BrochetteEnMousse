@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -43,12 +44,14 @@ namespace BrochetteEnMousse.Controllers
             return View(monster);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Monsters/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Monsters/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -65,6 +68,7 @@ namespace BrochetteEnMousse.Controllers
             return View(monster);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Monsters/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -81,6 +85,7 @@ namespace BrochetteEnMousse.Controllers
             return View(monster);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Monsters/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -116,6 +121,7 @@ namespace BrochetteEnMousse.Controllers
             return View(monster);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Monsters/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -134,6 +140,7 @@ namespace BrochetteEnMousse.Controllers
             return View(monster);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Monsters/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

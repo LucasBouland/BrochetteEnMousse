@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,6 +24,7 @@ namespace BrochetteEnMousse.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Sessions
         public async Task<IActionResult> Index()
         {
@@ -30,6 +32,7 @@ namespace BrochetteEnMousse.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Sessions/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -49,6 +52,7 @@ namespace BrochetteEnMousse.Controllers
             return View(session);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Sessions/Create
         public IActionResult Create()
         {
@@ -56,6 +60,7 @@ namespace BrochetteEnMousse.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Sessions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -87,6 +92,7 @@ namespace BrochetteEnMousse.Controllers
             return View(session);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Sessions/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -104,6 +110,7 @@ namespace BrochetteEnMousse.Controllers
             return View(session);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Sessions/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -140,6 +147,7 @@ namespace BrochetteEnMousse.Controllers
             return View(session);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Sessions/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -159,6 +167,7 @@ namespace BrochetteEnMousse.Controllers
             return View(session);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Sessions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
