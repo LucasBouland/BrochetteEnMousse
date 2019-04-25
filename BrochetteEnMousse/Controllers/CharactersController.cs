@@ -161,5 +161,22 @@ namespace BrochetteEnMousse.Controllers
         {
             return _context.Characters.Any(e => e.ID == id);
         }
+
+        [Authorize(Roles = "Admin,User")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPlayerCharacter(Character character)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(character);
+                var user = _context.Users.Single(u => u.Email == User.Identity.Name);
+                _context.Add(new CharacterCampaign {CampaignID = Request.Form["Campaign.ID"] , Character = character});
+                await _context.SaveChangesAsync();
+                return Json(new { character });
+            }
+            return View(character);
+        }
+
     }
 }

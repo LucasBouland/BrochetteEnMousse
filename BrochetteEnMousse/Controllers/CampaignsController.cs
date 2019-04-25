@@ -51,7 +51,7 @@ namespace BrochetteEnMousse.Controllers
             {
                 return NotFound();
             }
-            var campaign = await _context.Campaigns.Include(u => u.Sessions).Include(u => u.CampaignUsers).ThenInclude(u => u.User).FirstOrDefaultAsync(m => m.ID == id);
+            var campaign = await _context.Campaigns.Include(u => u.Sessions).Include(u => u.CampaignUsers).ThenInclude(u => u.User).Include(u => u.CharacterCampaigns).ThenInclude(u => u.Character).FirstOrDefaultAsync(m => m.ID == id);
             if (campaign == null)
             {
                 return NotFound();
