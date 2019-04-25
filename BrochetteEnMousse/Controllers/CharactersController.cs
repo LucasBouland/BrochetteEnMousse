@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,7 @@ namespace BrochetteEnMousse.Controllers
         // POST: Characters/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,Name,IsPlayerCharacter,Description,ID")] Character character)
@@ -69,6 +71,7 @@ namespace BrochetteEnMousse.Controllers
             return View(character);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Characters/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -89,6 +92,7 @@ namespace BrochetteEnMousse.Controllers
         // POST: Characters/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("UserID,Name,IsPlayerCharacter,Description,ID")] Character character)
@@ -121,7 +125,7 @@ namespace BrochetteEnMousse.Controllers
             ViewData["UserID"] = new SelectList(_context.Users, "Id", "Id", character.UserID);
             return View(character);
         }
-
+        [Authorize(Roles = "Admin,User")]
         // GET: Characters/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -141,6 +145,7 @@ namespace BrochetteEnMousse.Controllers
             return View(character);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Characters/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

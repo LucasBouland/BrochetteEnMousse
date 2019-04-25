@@ -1,16 +1,31 @@
 ﻿@page
 @model IndexModel
+@inject UserManager<User> userManager
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
+    var user = await userManager.FindByEmailAsync(User.Identity.Name);
 }
 
 <h4>@ViewData["Title"]</h4>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
+    <style>
+        .dz-preview{
+            display:none;
+        }
+    </style>
     <div class="col-md-6">
+        <form action="/user/upload/files"
+              class="dropzone"
+              id="my-awesome-dropzone"></form>
+        <div id="template" style="display:none"></div>
+        <div>
+            <img class="img-fluid" id="avatar-user" src="~/uploads/@(user.Id+".jpg")" />
+        </div>
         <form id="profile-form" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" disabled />
@@ -43,4 +58,23 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="/js/dropzone.js"></script>
+    <script> 
+        function refreshImage() {
+            $.ajax({
+            url: "/uploads/@(user.Id+".jpg")",
+            method: "GET",
+                success: function (data) {
+                    document.getElementById('avatar-user').src = "/uploads/@(user.Id+".jpg")?" + new Date().getTime();
+            },
+            error: function (data) {
+                document.getElementById('avatar-user').src = "/img/default-avatar.jpg";
+            }
+         });
+        }
+        refreshImage()
+        setInterval(refreshImage, 2000)
+        let imageDropzone = new Dropzone(document.getElementsByClassName("dropzone")[0], {
+        });
+    </script>
 }
