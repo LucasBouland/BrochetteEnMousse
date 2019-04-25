@@ -8,7 +8,7 @@
     @foreach (var item in Model)
     {
         // afficer uniquement ceux dont la visibilité == celle de l'utilisateur
-        @await Html.PartialAsync("_CardPartial", new CardViewModel { Columns = 6, Title = item.Name, Author = item.User.Pseudo, Content = item.Content })
+        @await Html.PartialAsync("_CardPartial", new CardViewModel { Columns = 6, Id = item.ID, Title = item.Name, Author = item.User.Pseudo, Content = item.Content })
 
     }
 </div>
