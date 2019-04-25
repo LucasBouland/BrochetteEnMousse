@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,7 @@ namespace BrochetteEnMousse.Controllers
             return View(scenario);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Scenarios/Create
         public IActionResult Create()
         {
@@ -55,6 +57,7 @@ namespace BrochetteEnMousse.Controllers
         // POST: Scenarios/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,Name,Visibility,Content,ID")] Scenario scenario)
@@ -69,6 +72,7 @@ namespace BrochetteEnMousse.Controllers
             return View(scenario);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Scenarios/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -86,6 +90,7 @@ namespace BrochetteEnMousse.Controllers
             return View(scenario);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Scenarios/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -122,6 +127,7 @@ namespace BrochetteEnMousse.Controllers
             return View(scenario);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // GET: Scenarios/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -141,6 +147,7 @@ namespace BrochetteEnMousse.Controllers
             return View(scenario);
         }
 
+        [Authorize(Roles = "Admin,User")]
         // POST: Scenarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
