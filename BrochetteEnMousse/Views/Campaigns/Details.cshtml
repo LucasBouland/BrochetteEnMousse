@@ -31,9 +31,11 @@
             </ul>
 
             <h4>
-                Joueurs:<button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddPlayers">
-                    +
-                </button>
+                Joueurs:
+                @if (User.Identity.Name == Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Email)
+                {
+                    <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddPlayers">+</button>
+                }
             </h4>
             <div id="Players">
                 <ul>
@@ -41,6 +43,9 @@
                     {
                         <li>
                             @player.User.Pseudo
+                            @if (User.Identity.Name == player.User.Pseudo) {
+                                <button></button>
+                            }
                         </li>
                     }
                 </ul>
@@ -50,30 +55,34 @@
                 @Html.Raw(Model.Campaign.Description)
             </div>
             <h4>Sessions:</h4>
-            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddSession">
-                Ajouter une session
-            </button>
-            <div id="Sessions">
-                <ul>
+            @if (User.Identity.Name == Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Email)
+            {
+                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddSession">Ajouter une session</button>
+            }
+                <div id="Sessions">
+                    <ul>
 
-                    @if (Model.Campaign.Sessions != null)
-                    {
-                        @foreach (var session in Model.Campaign.Sessions)
+                        @if (Model.Campaign.Sessions != null)
                         {
-                            <li>
-                                <a href="@Url.Action("details", "sessions", new { session.ID})">@session.Name</a>
-                            </li>
+                            @foreach (var session in Model.Campaign.Sessions)
+                            {
+                                <li>
+                                    <a href="@Url.Action("details", "sessions", new { session.ID})">@session.Name</a>
+                                </li>
+                            }
                         }
-                    }
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
     </div>
     <!--/.Card-->
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Campaign.ID">Edit</a> |
+    @if (User.Identity.Name == Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Email)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Campaign.ID">Edit</a> 
+}
     <a asp-action="Index">Back to List</a>
 </div>
 
