@@ -6,7 +6,7 @@
     <!--Card-->
     <div class="card">
         <!-- Card header -->
-        <div class="card-header d-sm-flex justify-content-between"><div class="mb-2 mb-sm-0 pt-1">@Model.Title</div> <div class="d-flex justify-content-center">@Model.Author</div></div>
+        <div class="card-header d-sm-flex justify-content-between"><div class="mb-2 mb-sm-0 pt-1"><a href="@Url.Action("details", "scenarios", new { @Model.Id})">@Model.Title</a></div> <div class="d-flex justify-content-center">@Model.Author</div></div>
         <!--Card content-->
         <div class="card-body">
             @Html.Raw(Model.Content)

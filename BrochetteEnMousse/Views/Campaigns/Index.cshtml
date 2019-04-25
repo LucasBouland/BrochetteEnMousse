@@ -44,7 +44,7 @@
                                 @foreach (var session in item.Sessions)
                                 {
                                     <li>
-                                        <a href="@Url.Action("details", "session", new { session.ID})">@session.Name</a>
+                                        <a href="@Url.Action("details", "sessions", new { session.ID})">@session.Name</a>
                                     </li>
                                 }
                             }
