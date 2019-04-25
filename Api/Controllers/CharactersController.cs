@@ -13,7 +13,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class CharactersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
