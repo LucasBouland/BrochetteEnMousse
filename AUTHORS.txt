@@ -1,4 +1,5 @@
-Guillaume ARSAC
+Guillaume ARSAC 
+  -> Dév de l'API
 Lucas BOULAND
 Julien LAPA
 Moustanir SOULE-ALI
