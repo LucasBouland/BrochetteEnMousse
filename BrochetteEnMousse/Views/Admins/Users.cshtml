@@ -1,0 +1,67 @@
+﻿@model Dictionary<User,IList<String>>
+@{
+    ViewData["Title"] = "Liste des utilisateurs";
+}
+
+<table>
+    <thead>
+        <tr class="table table-striped">
+
+            <th scope="row">Pseudo</th>
+            <th scope="row">Email</th>
+            <th scope="row">Status</th>
+            <th scope="row">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Key.Pseudo</td>
+                <td>@user.Key.Email</td>
+                <td>
+                    @foreach (var role in user.Value.ToList<String>())
+                    {@role}
+                </td>
+                <td>
+                    @foreach (var role in user.Value.ToList<String>())
+                    {
+                        @if (role == "Admin")
+                        {
+                            <a class="btn btn-info button-demote" data-id="@user.Key.Id">Retrograder</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-info button-promote" data-id="@user.Key.Id">Promouvoir</a>
+                        }
+                    }
+
+                </td>
+            </tr>
+        }
+        </tbody>
+</table>
+
+    <script>
+        $(".button-demote").click(event => {
+            console.log($(event.target).data("id"));
+            $.ajax({
+                url: "/admins/users/status?type=demote",
+                data: { id: $(event.target).data("id") },
+                method: "PUT"
+            }).done(() => {
+                document.location.reload(true);
+            });
+        });
+        $(".button-promote").click(event => {
+            $.ajax({
+                url: "/admins/users/status?type=promote",
+                data: { id: $(event.target).data("id") },
+                method: "PUT"
+            }).done(() => {
+                document.location.reload(true);
+            });
+        })
+    </script>
+
+

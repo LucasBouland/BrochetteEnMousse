@@ -15,7 +15,7 @@ namespace MousseModels.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -524,8 +524,8 @@ namespace MousseModels.Migrations
 
             modelBuilder.Entity("MousseModels.Models.Session", b =>
                 {
-                    b.HasOne("MousseModels.Models.User", "Campaign")
-                        .WithMany()
+                    b.HasOne("MousseModels.Models.Campaign", "Campaign")
+                        .WithMany("Sessions")
                         .HasForeignKey("CampaignID");
                 });
 

@@ -90,6 +90,7 @@ namespace BrochetteEnMousse.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _userManager.AddToRoleAsync(user, "User");
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

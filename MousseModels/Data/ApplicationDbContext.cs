@@ -22,6 +22,5 @@ namespace MousseModels.Data
         public DbSet<Scenario> Scenarios { get; set; }
         public DbSet<Monster> Monsters { get; set; }
         public DbSet<Map> Maps { get; set; }
-
     }
 }

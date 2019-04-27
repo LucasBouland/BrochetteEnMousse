@@ -13,9 +13,17 @@ namespace MousseModels.Models
         /// </summary>
         public int Columns { get; set; }
         /// <summary>
+        /// Id de l'objet de la carte
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
         /// Titre de la carte
         /// </summary>
         public string Title { get; set; }
+        /// <summary>
+        /// Le nom de l'auteur
+        /// </summary>
+        public string Author { get; set; }
         /// <summary>
         /// Contenu du body de la carte
         /// </summary>

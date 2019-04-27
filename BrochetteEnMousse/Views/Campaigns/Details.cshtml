@@ -1,36 +1,293 @@
-﻿@model MousseModels.Models.Campaign
+﻿@model MousseModels.Models.CampaignDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_TextEditorScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery-unobstrusive-ajax/jquery.unobstrusive-ajax.js"></script>
+}
 
+@section Css {
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.5/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.5/css/froala_style.min.css" rel="stylesheet" type="text/css" />
+}
 <h1>Details</h1>
 
-<div>
-    <h4>Campaign</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Visibility)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Visibility)
-        </dd>
-    </dl>
+<div class="col-md-12 mb-4">
+    <!--Card-->
+    <div class="card">
+        <!-- Card header -->
+        <div class="card-header d-sm-flex justify-content-between"><div class="mb-2 mb-sm-0 pt-1">@Model.Campaign.Name</div> <div class="d-flex justify-content-center">@Model.Campaign.CampaignUsers.First(u => u.IsGameMaster).User.Pseudo</div></div>
+        <!--Card content-->
+        <div class="card-body">
+            <h4>Maitre de Jeu:</h4>
+            <ul>
+                <li>
+                    @Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Pseudo
+                </li>
+
+            </ul>
+
+            <h4>
+                Joueurs:
+                @if (User.Identity.Name == Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Email)
+                {
+                    <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddPlayers">+</button>
+                }
+            </h4>
+
+            <div id="Players">
+                <ul>
+                    @foreach (var player in Model.Campaign.CampaignUsers.Where(u => !u.IsGameMaster))
+                    {
+                        <li>
+                            
+                                @player.User.Pseudo
+                                @if (User.Identity.Name == player.User.Email)
+                                {
+
+                                    @if (!Model.Campaign.CharacterCampaigns.Any(c => c.Character.User.Email == User.Identity.Name))
+                                    {
+                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddCharacter">Create Character</button>
+                                    }
+                                    else
+                                    {
+                                        @if (Model.Campaign.CharacterCampaigns.FirstOrDefault(c => c.Character.UserID == player.User.Id) != null)
+                                        {
+                                        @Model.Campaign.CharacterCampaigns.First(c => c.Character.UserID == player.User.Id).Character.Name
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    @if (Model.Campaign.CharacterCampaigns.FirstOrDefault(c => c.Character.UserID == player.User.Id) != null)
+                                    {
+                                        @Model.Campaign.CharacterCampaigns.First(c => c.Character.UserID == player.User.Id).Character.Name
+                                    }
+
+                                }
+
+                                
+                            </li>
+                        }
+                </ul>
+            </div>
+            <h4>Description:</h4>
+            <div>
+                @Html.Raw(Model.Campaign.Description)
+            </div>
+            <h4>Sessions:</h4>
+            @if (User.Identity.Name == Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Email)
+            {
+                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddSession">Ajouter une session</button>
+            }
+            <div id="Sessions">
+                <ul>
+
+                    @if (Model.Campaign.Sessions != null)
+                    {
+                        @foreach (var session in Model.Campaign.Sessions)
+                        {
+                            <li>
+                                <a href="@Url.Action("details", "sessions", new { session.ID })">@session.Name</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--/.Card-->
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    @if (User.Identity.Name == Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Email)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Campaign.ID">Edit</a>
+    }
     <a asp-action="Index">Back to List</a>
 </div>
+
+<div class="modal fade" id="AddSession" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Créer une nouvelle session</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <div class="text-center">
+                    <form asp-action="AddSession"
+                          method="post"
+                          data-ajax="true"
+                          data-ajax-method="post"
+                          data-ajax-complete="completed">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Session.CampaignID" class="control-label"></label>
+                            <input asp-for="Session.CampaignID" class="form-control" value="@Model.Campaign.ID" />
+                            <span asp-validation-for="Session.CampaignID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Session.Name" class="control-label"></label>
+                            <input asp-for="Session.Name" class="form-control" />
+                            <span asp-validation-for="Session.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Session.Description" class="control-label"></label>
+                            <textarea asp-for="Session.Description" class="form-control"> </textarea>
+                            <span asp-validation-for="Session.Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Session.Visibility" class="control-label"></label>
+                            <select asp-for="Session.Visibility" asp-items="@Html.GetEnumSelectList<MousseModels.Helpers.Visibility>()" class="form-control"></select>
+                            <span asp-validation-for="Session.Visibility" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <input type="submit" class="btn btn-info" />
+                            </div>
+                            <button role="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+
+<div class="modal fade" id="AddPlayers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Ajouter des joueurs</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <div class="text-center">
+                    <form asp-action="AddPlayers"
+                          method="post"
+                          data-ajax="true"
+                          data-ajax-method="post"
+                          data-ajax-complete="completed">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Campaign.ID" class="control-label"></label>
+                            <input asp-for="Campaign.ID" class="form-control" value="@Model.Campaign.ID" />
+                            <span asp-validation-for="Campaign.ID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CampaignUser.User.Pseudo" class="control-label"></label>
+                            <select multiple class="multi-select" id="my_multi_select1" asp-for="Campaign.CampaignUsers" asp-items="(List<SelectListItem>)ViewBag.Users"></select>
+                            <span asp-validation-for="Campaign.CampaignUsers" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <input type="submit" class="btn btn-info" />
+                            </div>
+                            <button role="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+
+<div class="modal fade" id="AddCharacter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Créer un personnage</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            @using Microsoft.AspNetCore.Identity
+            @inject UserManager<User> UserManager
+            @{var user = UserManager.GetUserId(User); }
+            <!--Body-->
+            <div class="modal-body">
+                <div class="text-center">
+                    <form asp-action="AddPlayerCharacter"
+                          asp-controller="Characters"
+                          method="post"
+                          data-ajax="true"
+                          data-ajax-method="post"
+                          data-ajax-complete="completed">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Campaign.ID" class="control-label"></label>
+                            <input asp-for="Campaign.ID" class="form-control" value="@Model.Campaign.ID" />
+                            <span asp-validation-for="Campaign.ID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Character.UserID" class="control-label"></label>
+                            <input asp-for="Character.UserID" class="form-control" value="@user" />
+                            <span asp-validation-for="Character.UserID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Character.Name" class="control-label"></label>
+                            <input asp-for="Character.Name" class="form-control" />
+                            <span asp-validation-for="Character.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Character.Description" class="control-label"></label>
+                            <textarea asp-for="Character.Description" class="form-control"></textarea>
+                            <span asp-validation-for="Character.Description" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <input type="submit" class="btn btn-info" />
+                            </div>
+                            <button role="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+<script type="text/javascript">
+    completed = function (xhr) {
+        console.log(xhr);
+        if (xhr.responseJSON.campaignUsers) {
+            for (var user in xhr.responseJSON.campaignUsers) {
+                $('#Players ul').append('<li><a>' + xhr.responseJSON.campaignUsers[user] + '</a></li>');
+            }
+            $('#AddPlayers').modal('hide')
+        }
+        else {
+            var session = xhr.responseJSON;
+            $('#Sessions ul').append('<li><a>' + session.name + '</a></li>');
+            $('#AddSessions').modal('hide')
+        }
+    };
+</script>

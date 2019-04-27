@@ -25,5 +25,7 @@ namespace MousseModels.Models
         public ICollection<CampaignUser> CampaignUsers { get; set; }
         public ICollection<CharacterCampaign> CharacterCampaigns { get; set; }
 
+        public ICollection<Session> Sessions { get; set; }
+
     }
 }
