@@ -37,17 +37,42 @@
                     <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddPlayers">+</button>
                 }
             </h4>
+
             <div id="Players">
                 <ul>
                     @foreach (var player in Model.Campaign.CampaignUsers.Where(u => !u.IsGameMaster))
                     {
                         <li>
-                            @player.User.Pseudo
-                            @if (User.Identity.Name == player.User.Pseudo) {
-                                <button></button>
-                            }
-                        </li>
-                    }
+                            
+                                @player.User.Pseudo
+                                @if (User.Identity.Name == player.User.Email)
+                                {
+
+                                    @if (!Model.Campaign.CharacterCampaigns.Any(c => c.Character.User.Email == User.Identity.Name))
+                                    {
+                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddCharacter">Create Character</button>
+                                    }
+                                    else
+                                    {
+                                        @if (Model.Campaign.CharacterCampaigns.FirstOrDefault(c => c.Character.UserID == player.User.Id) != null)
+                                        {
+                                        @Model.Campaign.CharacterCampaigns.First(c => c.Character.UserID == player.User.Id).Character.Name
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    @if (Model.Campaign.CharacterCampaigns.FirstOrDefault(c => c.Character.UserID == player.User.Id) != null)
+                                    {
+                                        @Model.Campaign.CharacterCampaigns.First(c => c.Character.UserID == player.User.Id).Character.Name
+                                    }
+
+                                }
+
+                                
+                            </li>
+                        }
                 </ul>
             </div>
             <h4>Description:</h4>
@@ -59,21 +84,21 @@
             {
                 <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#AddSession">Ajouter une session</button>
             }
-                <div id="Sessions">
-                    <ul>
+            <div id="Sessions">
+                <ul>
 
-                        @if (Model.Campaign.Sessions != null)
+                    @if (Model.Campaign.Sessions != null)
+                    {
+                        @foreach (var session in Model.Campaign.Sessions)
                         {
-                            @foreach (var session in Model.Campaign.Sessions)
-                            {
-                                <li>
-                                    <a href="@Url.Action("details", "sessions", new { session.ID})">@session.Name</a>
-                                </li>
-                            }
+                            <li>
+                                <a href="@Url.Action("details", "sessions", new { session.ID })">@session.Name</a>
+                            </li>
                         }
-                    </ul>
-                </div>
+                    }
+                </ul>
             </div>
+        </div>
     </div>
     <!--/.Card-->
 </div>
@@ -81,8 +106,8 @@
 <div>
     @if (User.Identity.Name == Model.Campaign.CampaignUsers.Single(u => u.IsGameMaster).User.Email)
     {
-        <a asp-action="Edit" asp-route-id="@Model.Campaign.ID">Edit</a> 
-}
+        <a asp-action="Edit" asp-route-id="@Model.Campaign.ID">Edit</a>
+    }
     <a asp-action="Index">Back to List</a>
 </div>
 
@@ -190,6 +215,66 @@
     </div>
 </div>
 
+<div class="modal fade" id="AddCharacter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Créer un personnage</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            @using Microsoft.AspNetCore.Identity
+            @inject UserManager<User> UserManager
+            @{var user = UserManager.GetUserId(User); }
+            <!--Body-->
+            <div class="modal-body">
+                <div class="text-center">
+                    <form asp-action="AddPlayerCharacter"
+                          asp-controller="Characters"
+                          method="post"
+                          data-ajax="true"
+                          data-ajax-method="post"
+                          data-ajax-complete="completed">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Campaign.ID" class="control-label"></label>
+                            <input asp-for="Campaign.ID" class="form-control" value="@Model.Campaign.ID" />
+                            <span asp-validation-for="Campaign.ID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Character.UserID" class="control-label"></label>
+                            <input asp-for="Character.UserID" class="form-control" value="@user" />
+                            <span asp-validation-for="Character.UserID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Character.Name" class="control-label"></label>
+                            <input asp-for="Character.Name" class="form-control" />
+                            <span asp-validation-for="Character.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Character.Description" class="control-label"></label>
+                            <textarea asp-for="Character.Description" class="form-control"></textarea>
+                            <span asp-validation-for="Character.Description" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <input type="submit" class="btn btn-info" />
+                            </div>
+                            <button role="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
 <script type="text/javascript">
     completed = function (xhr) {
         console.log(xhr);

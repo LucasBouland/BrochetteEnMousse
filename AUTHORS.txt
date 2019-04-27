@@ -1,4 +1,11 @@
-Guillaume ARSAC
+Guillaume ARSAC 
+  -> Dév de l'API
 Lucas BOULAND
+  -> Mise en place du projet Initial (+ controllers)
+  ->Template
+  ->Gestion de campagne/sessions/personnages
+  ->WYSIWIG
+  ->Ajax unobstrusive
 Julien LAPA
 Moustanir SOULE-ALI
+  ->Roles,Claims,Authentification,Front
