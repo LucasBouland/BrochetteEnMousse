@@ -7,5 +7,9 @@ Lucas BOULAND
   ->WYSIWIG
   ->Ajax unobstrusive
 Julien LAPA
+  ->Test unitaire
+  ->Validateur personnalisé d'image
 Moustanir SOULE-ALI
-  ->Roles,Claims,Authentification,Front
+  ->Gestion des Rôles et Claims
+  ->Authentification
+  ->Dashboard Admin

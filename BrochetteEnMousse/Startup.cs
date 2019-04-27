@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+
 namespace BrochetteEnMousse
 {
     public class Startup
@@ -52,6 +53,7 @@ namespace BrochetteEnMousse
             {
                 options.AddPolicy("isMJ", policy => policy.RequireClaim("IsMJ", "true"));
             });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
